@@ -15,6 +15,7 @@
     "url": "https://gitee.com/y_project/RuoYi-Vue.git"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-vue": "^4.0.1",
     "@element-plus/icons-vue": "2.0.10",
     "@vueup/vue-quill": "1.1.0",
     "@vueuse/core": "9.5.0",
@@ -25,6 +26,7 @@
     "fuse.js": "6.6.2",
     "js-cookie": "3.0.1",
     "jsencrypt": "3.3.1",
+    "my-ckeditor5-classic": "^0.5.37",
     "nprogress": "0.2.0",
     "pinia": "2.0.22",
     "vue": "3.2.45",
