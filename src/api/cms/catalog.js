@@ -9,6 +9,14 @@ export function listCatalog(query) {
   })
 }
 
+// 查询网站栏目树形结构
+export function treeCatalog() {
+  return request({
+    url: '/cms/catalog/tree',
+    method: 'get'
+  })
+}
+
 // 查询网站栏目详细
 export function getCatalog(catalogId) {
   return request({
