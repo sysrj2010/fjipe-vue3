@@ -15,7 +15,7 @@ class ImageUploadAdapter {
         data.append("file", await this.loader.file);
         const res = await axios({
             //url: process.env.VUE_APP_BASE_URL + `/common/upload`,
-            url: "http://192.168.0.200:8080/common/upload",
+            url: "/dev-api/common/upload",
             method: "POST",
             data,
             withCredentials: false, // true 为不允许带 token, false 为允许
