@@ -44,7 +44,8 @@
             icon="Plus"
             @click="handleAdd"
             v-hasPermi="['cms:article:add']"
-        >新增</el-button>
+        >新增
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -54,7 +55,8 @@
             :disabled="single"
             @click="handleUpdate"
             v-hasPermi="['cms:article:edit']"
-        >修改</el-button>
+        >修改
+        </el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -64,14 +66,15 @@
             :disabled="multiple"
             @click="handleDelete"
             v-hasPermi="['cms:article:remove']"
-        >删除</el-button>
+        >删除
+        </el-button>
       </el-col>
       <right-toolbar v-model:showSearch="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="articleList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="序号" align="center" prop="articleId" width="100" />
+      <el-table-column type="selection" width="55" align="center"/>
+      <el-table-column label="序号" align="center" prop="articleId" width="100"/>
       <el-table-column
           label="内容标题"
           align="center"
@@ -81,11 +84,11 @@
 
       <el-table-column label="显示方式" align="center" prop="status" width="100">
         <template #default="scope">
-          <dict-tag :options="cms_article_status" :value="scope.row.status" />
+          <dict-tag :options="cms_article_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
 
-      <el-table-column label="发布人" align="center" prop="createBy" width="100" />
+      <el-table-column label="发布人" align="center" prop="createBy" width="100"/>
       <el-table-column label="发布时间" align="center" prop="createTime" width="100">
         <template #default="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
@@ -99,8 +102,12 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
-          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['cms:article:edit']">修改</el-button>
-          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)" v-hasPermi="['cms:article:remove']" >删除</el-button>
+          <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['cms:article:edit']">
+            修改
+          </el-button>
+          <el-button link type="primary" icon="Delete" @click="handleDelete(scope.row)"
+                     v-hasPermi="['cms:article:remove']">删除
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -114,67 +121,86 @@
     />
 
     <!-- 添加或修改内容对话框 -->
-    <el-dialog :title="title" v-model="open" width="780px" append-to-body>
+    <el-dialog :title="title" v-model="open" width="1000px" append-to-body>
       <el-form ref="articleRef" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="24">
             <el-form-item label="内容标题" prop="articleTitle">
-              <el-input v-model="form.articleTitle" placeholder="请输入内容标题" />
+              <el-input v-model="form.articleTitle" placeholder="请输入标题"/>
             </el-form-item>
           </el-col>
 
           <el-col :span="16">
-            <el-form-item label="内容概要">
-              <el-input v-model="form.articleDesc" type="textarea" placeholder="请输入内容概要"></el-input>
-            </el-form-item>
+            <el-row>
+              <el-col :span="24">
+                <el-form-item label="内容概要">
+                  <el-input v-model="form.articleDesc" type="textarea" placeholder="请输入概要"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="12">
+
+                <el-form-item label="显示时间" prop="showTime">
+                  <el-date-picker clearable
+                                  v-model="form.showTime"
+                                  type="datetime"
+                                  value-format="YYYY-MM-DD HH:mm:ss"
+                                  placeholder="请选择显示时间">
+                  </el-date-picker>
+                </el-form-item>
+
+              </el-col>
+
+              <el-col :span="12">
+                <el-form-item label="显示方式">
+                  <el-radio-group v-model="form.status">
+                    <el-radio
+                        v-for="dict in cms_article_status"
+                        :key="dict.value"
+                        :label="dict.value"
+                    >{{ dict.label }}
+                    </el-radio>
+                  </el-radio-group>
+                </el-form-item>
+              </el-col>
+
+            </el-row>
+
+            <el-row>
+              <el-col :span="24">
+                <el-form-item label="发布栏目" prop="catalogId">
+                  <el-tree-select ref="catalog_tree"
+                                  v-model="form.catalogId"
+                                  :data="catalogOptions"
+                                  multiple
+                                  :render-after-expand="false"
+                                  show-checkbox
+                                  @check="getSelectCatalogs"
+                                  style="width:100%"
+                  />
+                </el-form-item>
+              </el-col>
+            </el-row>
+
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="内容头图" prop="imgPath">
-              <image-upload v-model="form.imgPath"/>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="8">
-            <el-form-item label="显示方式">
-              <el-radio-group v-model="form.status">
-                <el-radio
-                    v-for="dict in cms_article_status"
-                    :key="dict.value"
-                    :label="dict.value"
-                >{{ dict.label }}</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="8">
-            <el-form-item label="显示时间" prop="showTime">
-              <el-date-picker clearable
-                              v-model="form.showTime"
-                              type="datetime"
-                              value-format="YYYY-MM-DD HH:mm:ss"
-                              placeholder="请选择显示时间">
-              </el-date-picker>
-            </el-form-item>
-          </el-col>
-
-          <el-col :span="8">
-            <el-form-item label="发布栏目" prop="catalogId">
-              <el-tree-select  ref="catalog_tree"
-                  v-model="form.catalogId"
-                  :data="catalogOptions"
-                  multiple
-                  :render-after-expand="false"
-                  show-checkbox
-                  @check="getSelectCatalogs"
-              />
+            <el-form-item label="头条图片" prop="imgPath">
+              <image-upload v-model="form.imgPath" :limit="imageNumLimit"/>
             </el-form-item>
           </el-col>
 
           <el-col :span="24">
-            <el-form-item label="内容HTML">
-              <editor v-model="form.articleHtml" :min-height="192"/>
-            </el-form-item>
+<!--            <el-form-item label="文章内容">-->
+              <!--              <editor v-model="form.articleHtml" :min-height="192"/>-->
+              <ckeditor :editor="editor_data.editor"
+                        @ready="onEditorReady"
+                        v-model="form.articleHtml"
+                        :config="editor_data.editorConfig">
+              </ckeditor>
+<!--            </el-form-item>-->
           </el-col>
         </el-row>
       </el-form>
@@ -189,12 +215,17 @@
 </template>
 
 <script setup name="cmsArticle">
-import { listArticle, getArticle, delArticle, addArticle, updateArticle } from "@/api/cms/article";
-import { treeCatalog } from "@/api/cms/catalog";
 
-const { proxy } = getCurrentInstance();
-const { cms_article_status} = proxy.useDict("cms_article_status");
+import {onActivated, onMounted} from 'vue'
+import {listArticle, getArticle, delArticle, addArticle, updateArticle} from "@/api/cms/article";
+import {treeCatalog} from "@/api/cms/catalog";
+import cmsEditor from "my-ckeditor5-classic";
+import ImageUploadAdapter from "./ImageUploadAdapter.js";
 
+const {proxy} = getCurrentInstance();
+const {cms_article_status} = proxy.useDict("cms_article_status");
+//图片数量限制
+const imageNumLimit = ref(1);
 const articleList = ref([]);
 const catalogOptions = ref([]);
 const open = ref(false);
@@ -216,17 +247,127 @@ const data = reactive({
     status: undefined
   },
   rules: {
-    articleTitle: [{ required: true, message: "内容标题不能为空", trigger: "blur" }],
-    articleHtml: [{ required: true, message: "内容正文不能为空", trigger: "blur" }]
+    articleTitle: [{required: true, message: "内容标题不能为空", trigger: "blur"}],
+    articleHtml: [{required: true, message: "内容正文不能为空", trigger: "blur"}],
+    showTime: [{required: true, message: "内容发布日期不能为空", trigger: "blur"}]
   },
 });
 
-const { queryParams, form, rules } = toRefs(data);
+const {queryParams, form, rules} = toRefs(data);
+
+const editor_data = reactive({
+  editor: cmsEditor,
+  editorConfig: {
+    toolbar: {
+      shouldNotGroupWhenFull: true,
+      items: [
+        'heading',
+        '|',
+        'bold',
+        'italic',
+        'underline',
+        'strikethrough',
+        'code',
+        'link',
+        // '|',
+        // 'numberedList',
+        // 'bulletedList',
+        '|',
+        'fontFamily',
+        'fontSize',
+        'fontColor',
+        'fontBackgroundColor',
+        '|',
+        'outdent',
+        'indent',
+        '|',
+        'blockQuote',
+        'alignment',
+        'insertImage',
+        'mediaEmbed',
+        'insertTable',
+        'horizontalLine',
+        'specialCharacters',
+        '|',
+        'undo',
+        'redo',
+        'subscript',
+        'superscript',
+        'findAndReplace',
+        'highlight',
+        'removeFormat',
+        'selectAll',
+
+      ]
+    },
+
+    heading: {
+      options: [
+        {model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph'},
+        {model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1'},
+        {model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2'},
+        {model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3'}
+      ]
+    },
+    fontFamily: {
+      options: [
+        "default",
+        "宋体",
+        "仿宋",
+        "微软雅黑",
+        "楷体",
+        "黑体",
+        "Arial, Helvetica, sans-serif",
+        "Courier New, Courier, monospace",
+        "Georgia, serif",
+        "Lucida Sans Unicode, Lucida Grande, sans-serif",
+        "Tahoma, Geneva, sans-serif",
+        "Times New Roman, Times, serif",
+      ]
+    },
+    fontSize: {
+      options: [9, 11, 12, "default", 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40,],
+      highlight: {
+        options: [
+          {
+            model: 'greenMarker',
+            class: 'marker-green',
+            title: 'Green marker',
+            color: 'var(--ck-highlight-marker-green)',
+            type: 'marker'
+          },
+          {
+            model: 'redPen',
+            class: 'pen-red',
+            title: 'Red pen',
+            color: 'var(--ck-highlight-pen-red)',
+            type: 'pen'
+          }
+        ]
+      },
+      supportAllValues: true
+    },
+    alignment: {
+      options: ['left', 'center', 'right']
+    },
+    table: {
+      contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'toggleTableCaption', 'tableProperties', 'tableCellProperties']
+    }
+  }
+})
+
+function onEditorReady(editor) {
+  form.value.ArticleHtml="请在此处输入正文...";
+  editor.plugins.get("FileRepository").createUploadAdapter = loader => {
+    return new ImageUploadAdapter(loader);
+  };
+}
+
 
 /**
  * 获取树形栏目选中项
  */
-function getSelectCatalogs(){
+function getSelectCatalogs() {
 
 }
 
@@ -254,6 +395,7 @@ function cancel() {
   open.value = false;
   reset();
 }
+
 /** 表单重置 */
 function reset() {
   form.value = {
@@ -261,50 +403,60 @@ function reset() {
     articleTitle: undefined,
     articleDesc: undefined,
     imgPath: undefined,
-    ArticleHtml: undefined,
+    ArticleHtml: "<div>请在此输入正文...</div>",
     showTime: undefined,
     catalogId: undefined,
-    status: "2"
+    status: "1"
   };
   getCatalogTreeSelect();
   proxy.resetForm("articleRef");
 }
+
 /** 搜索按钮操作 */
 function handleQuery() {
   queryParams.value.pageNum = 1;
   getList();
 }
+
 /** 重置按钮操作 */
 function resetQuery() {
   proxy.resetForm("queryRef");
   handleQuery();
 }
+
 /** 多选框选中数据 */
 function handleSelectionChange(selection) {
   ids.value = selection.map(item => item.articleId);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
 }
+
 /** 新增按钮操作 */
 function handleAdd() {
   reset();
   open.value = true;
   title.value = "添加内容";
 }
+
 /**修改按钮操作 */
 function handleUpdate(row) {
   reset();
   const articleId = row.articleId || ids.value;
   getArticle(articleId).then(response => {
     form.value = response.data;
+    let tmp = form.value.catalogId.split(",");
+    form.value.catalogId = tmp;
     open.value = true;
     title.value = "修改内容";
   });
 }
+
 /** 提交按钮 */
 function submitForm() {
   proxy.$refs["articleRef"].validate(valid => {
     if (valid) {
+      let tmp = form.value.catalogId ;
+      form.value.catalogId = tmp.join();
       if (form.value.articleId != undefined) {
         updateArticle(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
@@ -321,16 +473,28 @@ function submitForm() {
     }
   });
 }
+
 /** 删除按钮操作 */
 function handleDelete(row) {
   const articleIds = row.articleId || ids.value
-  proxy.$modal.confirm('是否确认删除内容编号为"' + articleIds + '"的数据项？').then(function() {
-    return delarticle(articleIds);
+  proxy.$modal.confirm('是否确认删除内容编号为"' + articleIds + '"的数据项？').then(function () {
+    return delArticle(articleIds);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");
-  }).catch(() => {});
+  }).catch(() => {
+  });
 }
 
 getList();
 </script>
+
+
+<style>
+  .ck-editor {
+    min-width: 900px !important;
+  }
+  .ck-content {
+    min-height: 600px;
+  }
+</style>
