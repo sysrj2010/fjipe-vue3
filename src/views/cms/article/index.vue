@@ -160,15 +160,14 @@
 
           <el-col :span="8">
             <el-form-item label="发布栏目" prop="catalogId">
-              <el-tree
+              <el-tree-select  ref="catalog_tree"
                   v-model="form.catalogId"
                   :data="catalogOptions"
+                  multiple
+                  :render-after-expand="false"
                   show-checkbox
-                  ref="catalogRef"
-                  node-key="id"
-                  empty-text="加载中，请稍候"
-                  :props="{ label: 'catalogName', children: 'children' }"
-              ></el-tree>
+                  @check="getSelectCatalogs"
+              />
             </el-form-item>
           </el-col>
 
@@ -189,7 +188,7 @@
   </div>
 </template>
 
-<script setup name="content">
+<script setup name="cmsArticle">
 import { listArticle, getArticle, delArticle, addArticle, updateArticle } from "@/api/cms/article";
 import { treeCatalog } from "@/api/cms/catalog";
 
@@ -224,6 +223,13 @@ const data = reactive({
 
 const { queryParams, form, rules } = toRefs(data);
 
+/**
+ * 获取树形栏目选中项
+ */
+function getSelectCatalogs(){
+
+}
+
 /** 查询内容列表 */
 function getList() {
   loading.value = true;
@@ -253,10 +259,14 @@ function reset() {
   form.value = {
     articleId: undefined,
     articleTitle: undefined,
-    articleType: undefined,
-    articleArticle: undefined,
-    status: "0"
+    articleDesc: undefined,
+    imgPath: undefined,
+    ArticleHtml: undefined,
+    showTime: undefined,
+    catalogId: undefined,
+    status: "2"
   };
+  getCatalogTreeSelect();
   proxy.resetForm("articleRef");
 }
 /** 搜索按钮操作 */
@@ -278,7 +288,6 @@ function handleSelectionChange(selection) {
 /** 新增按钮操作 */
 function handleAdd() {
   reset();
-  getCatalogTreeSelect();
   open.value = true;
   title.value = "添加内容";
 }
