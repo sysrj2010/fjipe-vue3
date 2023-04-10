@@ -24,7 +24,6 @@
           <el-tree-select ref="query_catalog_tree"
                           v-model="queryParams.catalogName"
                           :data="catalogOptionsForQuery"
-                          multiple
                           :render-after-expand="false"
                           show-checkbox
                           style="width: 200px"
@@ -394,7 +393,7 @@ function onEditorReady(editor) {
  */
 function getSelectCatalogs(tree_name) {
   let tmp = proxy.$refs['query_catalog_tree'].getCheckedKeys();
-  console.log(tmp);
+ // console.log(tmp);
 }
 
 /** 查询内容列表 */
@@ -455,11 +454,9 @@ function handleQuery() {
   // let tmp1 = proxy.$refs['query_catalog_tree'].getCurrentKey();
   // console.log(tmp1);
   queryParams.value.pageNum = 1;
-  let tmp = queryParams.value.catalogName.join();
-  alert(tmp);
-  queryParams.value.catalogName = tmp;
-  console.log(queryParams.value);
-  // getList();
+  // let tmp = queryParams.value.catalogName.join();
+  // queryParams.value.catalogName = tmp;
+   getList();
 }
 
 /** 重置按钮操作 */
