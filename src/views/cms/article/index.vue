@@ -1,24 +1,38 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryRef" :inline="true" v-show="showSearch">
-      <el-form-item label="内容标题" prop="articleTitle">
+      <el-form-item label="标题" prop="articleTitle">
         <el-input
             v-model="queryParams.articleTitle"
-            placeholder="请输入内容标题"
+            placeholder="请输入搜索标题"
             clearable
             style="width: 200px"
             @keyup.enter="handleQuery"
         />
       </el-form-item>
 
-      <el-form-item label="发布者" prop="createBy">
+      <el-form-item label="内容" prop="articleText">
         <el-input
-            v-model="queryParams.createBy"
-            placeholder="请输入发布人"
+            v-model="queryParams.articleText"
+            placeholder="请输入搜索内容"
             clearable
             style="width: 200px"
             @keyup.enter="handleQuery"
         />
+
+        <el-form-item label="发布栏目" prop="catalogName">
+          <el-tree-select ref="query_catalog_tree"
+                          v-model="queryParams.catalogName"
+                          :data="catalogOptionsForQuery"
+                          multiple
+                          :render-after-expand="false"
+                          show-checkbox
+                          style="width: 200px"
+                          @keyup.enter="handleQuery"
+                          @check = "getSelectCatalogs('query_catalog_tree')"
+          />
+        </el-form-item>
+
       </el-form-item>
       <el-form-item label="显示方式" prop="status">
         <el-select v-model="queryParams.status" placeholder="显示方式" clearable style="width: 200px">
@@ -81,6 +95,7 @@
           prop="articleTitle"
           :show-overflow-tooltip="true"
       />
+      <el-table-column label="所属栏目" align="center" prop="catalogName" width="200"></el-table-column>
 
       <el-table-column label="显示方式" align="center" prop="status" width="100">
         <template #default="scope">
@@ -100,6 +115,7 @@
           <span>{{ parseTime(scope.row.showTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
+
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template #default="scope">
           <el-button link type="primary" icon="Edit" @click="handleUpdate(scope.row)" v-hasPermi="['cms:article:edit']">
@@ -170,15 +186,15 @@
 
             <el-row>
               <el-col :span="24">
-                <el-form-item label="发布栏目" prop="catalogId">
-                  <el-tree-select ref="catalog_tree"
-                                  v-model="form.catalogId"
+                <el-form-item label="发布栏目">
+                  <el-tree-select ref="form_catalog_tree"
+                                  v-model="form.catalogName"
                                   :data="catalogOptions"
                                   multiple
                                   :render-after-expand="false"
                                   show-checkbox
-                                  @check="getSelectCatalogs"
                                   style="width:100%"
+                                  @check = "getSelectCatalogs('form_catalog_tree')"
                   />
                 </el-form-item>
               </el-col>
@@ -193,14 +209,13 @@
           </el-col>
 
           <el-col :span="24">
-<!--            <el-form-item label="文章内容">-->
-              <!--              <editor v-model="form.articleHtml" :min-height="192"/>-->
+<!--      <el-form-item label="文章内容">-->
               <ckeditor :editor="editor_data.editor"
                         @ready="onEditorReady"
                         v-model="form.articleHtml"
                         :config="editor_data.editorConfig">
               </ckeditor>
-<!--            </el-form-item>-->
+<!--      </el-form-item>-->
           </el-col>
         </el-row>
       </el-form>
@@ -222,12 +237,18 @@ import {treeCatalog} from "@/api/cms/catalog";
 import cmsEditor from "my-ckeditor5-classic";
 import ImageUploadAdapter from "./ImageUploadAdapter.js";
 
+
+
+
+
+
 const {proxy} = getCurrentInstance();
 const {cms_article_status} = proxy.useDict("cms_article_status");
 //图片数量限制
 const imageNumLimit = ref(1);
 const articleList = ref([]);
 const catalogOptions = ref([]);
+const catalogOptionsForQuery = ref([]);
 const open = ref(false);
 const loading = ref(true);
 const showSearch = ref(true);
@@ -243,13 +264,17 @@ const data = reactive({
     pageNum: 1,
     pageSize: 10,
     articleTitle: undefined,
+    articleText: undefined,
+    catalogId: undefined,
+    catalogName: undefined,
     createBy: undefined,
     status: undefined
   },
   rules: {
     articleTitle: [{required: true, message: "内容标题不能为空", trigger: "blur"}],
     articleHtml: [{required: true, message: "内容正文不能为空", trigger: "blur"}],
-    showTime: [{required: true, message: "内容发布日期不能为空", trigger: "blur"}]
+    showTime: [{required: true, message: "内容发布日期不能为空", trigger: "blur"}],
+    catalogId: [{required: true, message: "所属栏目不能为空", trigger: "blur"}]
   },
 });
 
@@ -284,7 +309,7 @@ const editor_data = reactive({
         'blockQuote',
         'alignment',
         'insertImage',
-        'mediaEmbed',
+       // 'mediaEmbed',
         'insertTable',
         'horizontalLine',
         'specialCharacters',
@@ -367,8 +392,9 @@ function onEditorReady(editor) {
 /**
  * 获取树形栏目选中项
  */
-function getSelectCatalogs() {
-
+function getSelectCatalogs(tree_name) {
+  let tmp = proxy.$refs['query_catalog_tree'].getCheckedKeys();
+  console.log(tmp);
 }
 
 /** 查询内容列表 */
@@ -390,6 +416,17 @@ function getCatalogTreeSelect() {
   });
 }
 
+/**
+ * 搜索框树形栏目
+ */
+
+getCatalogTreeSelectForQuery();
+function getCatalogTreeSelectForQuery() {
+  treeCatalog().then(response => {
+    catalogOptionsForQuery.value = response.data;
+  });
+}
+
 /** 取消按钮 */
 function cancel() {
   open.value = false;
@@ -406,6 +443,7 @@ function reset() {
     ArticleHtml: "<div>请在此输入正文...</div>",
     showTime: undefined,
     catalogId: undefined,
+    catalogName: undefined,
     status: "1"
   };
   getCatalogTreeSelect();
@@ -414,8 +452,14 @@ function reset() {
 
 /** 搜索按钮操作 */
 function handleQuery() {
+  // let tmp1 = proxy.$refs['query_catalog_tree'].getCurrentKey();
+  // console.log(tmp1);
   queryParams.value.pageNum = 1;
-  getList();
+  let tmp = queryParams.value.catalogName.join();
+  alert(tmp);
+  queryParams.value.catalogName = tmp;
+  console.log(queryParams.value);
+  // getList();
 }
 
 /** 重置按钮操作 */
@@ -444,8 +488,8 @@ function handleUpdate(row) {
   const articleId = row.articleId || ids.value;
   getArticle(articleId).then(response => {
     form.value = response.data;
-    let tmp = form.value.catalogId.split(",");
-    form.value.catalogId = tmp;
+    let tmp = form.value.catalogName.split(",");
+    form.value.catalogName = tmp;
     open.value = true;
     title.value = "修改内容";
   });
@@ -455,8 +499,8 @@ function handleUpdate(row) {
 function submitForm() {
   proxy.$refs["articleRef"].validate(valid => {
     if (valid) {
-      let tmp = form.value.catalogId ;
-      form.value.catalogId = tmp.join();
+      let tmp = form.value.catalogName ;
+      form.value.catalogName = tmp.join();
       if (form.value.articleId != undefined) {
         updateArticle(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
