@@ -525,7 +525,6 @@ function handleDelete(row) {
   }).catch(() => {
   });
 }
-
 getList();
 </script>
 
