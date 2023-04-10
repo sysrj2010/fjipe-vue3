@@ -28,7 +28,6 @@
                           show-checkbox
                           style="width: 200px"
                           @keyup.enter="handleQuery"
-                          @check = "getSelectCatalogs('query_catalog_tree')"
           />
         </el-form-item>
 
@@ -193,7 +192,6 @@
                                   :render-after-expand="false"
                                   show-checkbox
                                   style="width:100%"
-                                  @check = "getSelectCatalogs('form_catalog_tree')"
                   />
                 </el-form-item>
               </el-col>
@@ -308,7 +306,6 @@ const editor_data = reactive({
         'blockQuote',
         'alignment',
         'insertImage',
-       // 'mediaEmbed',
         'insertTable',
         'horizontalLine',
         'specialCharacters',
@@ -387,15 +384,6 @@ function onEditorReady(editor) {
   };
 }
 
-
-/**
- * 获取树形栏目选中项
- */
-function getSelectCatalogs(tree_name) {
-  let tmp = proxy.$refs['query_catalog_tree'].getCheckedKeys();
- // console.log(tmp);
-}
-
 /** 查询内容列表 */
 function getList() {
   loading.value = true;
@@ -451,12 +439,8 @@ function reset() {
 
 /** 搜索按钮操作 */
 function handleQuery() {
-  // let tmp1 = proxy.$refs['query_catalog_tree'].getCurrentKey();
-  // console.log(tmp1);
   queryParams.value.pageNum = 1;
-  // let tmp = queryParams.value.catalogName.join();
-  // queryParams.value.catalogName = tmp;
-   getList();
+  getList();
 }
 
 /** 重置按钮操作 */
@@ -498,6 +482,9 @@ function submitForm() {
     if (valid) {
       let tmp = form.value.catalogName ;
       form.value.catalogName = tmp.join();
+     // 获取选中的catalogId
+      select_treeNode_catalogId();
+
       if (form.value.articleId != undefined) {
         updateArticle(form.value).then(response => {
           proxy.$modal.msgSuccess("修改成功");
@@ -513,6 +500,18 @@ function submitForm() {
       }
     }
   });
+}
+
+//获取选择有栏目节点编号
+function select_treeNode_catalogId()
+{
+  let nodes = proxy.$refs['form_catalog_tree'].getCheckedNodes();
+  let ids = new Array();
+  nodes.forEach((node,index,array)=>{
+    if(node.children == null)
+      ids.push(node.id);
+  })
+  form.value.catalogId=","+ids.join()+","
 }
 
 /** 删除按钮操作 */
