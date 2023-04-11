@@ -234,11 +234,6 @@ import {treeCatalog} from "@/api/cms/catalog";
 import cmsEditor from "my-ckeditor5-classic";
 import ImageUploadAdapter from "./ImageUploadAdapter.js";
 
-
-
-
-
-
 const {proxy} = getCurrentInstance();
 const {cms_article_status} = proxy.useDict("cms_article_status");
 //图片数量限制

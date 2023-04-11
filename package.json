@@ -17,6 +17,7 @@
   "dependencies": {
     "@ckeditor/ckeditor5-vue": "^4.0.1",
     "@element-plus/icons-vue": "2.0.10",
+    "@tinymce/tinymce-vue": "^5.1.0",
     "@vueup/vue-quill": "1.1.0",
     "@vueuse/core": "9.5.0",
     "axios": "0.27.2",
@@ -29,6 +30,7 @@
     "my-ckeditor5-classic": "^0.5.37",
     "nprogress": "0.2.0",
     "pinia": "2.0.22",
+    "tinymce": "^6.4.1",
     "vue": "3.2.45",
     "vue-cropper": "1.0.3",
     "vue-router": "4.1.4"
