@@ -184,7 +184,7 @@
 
             <el-row>
               <el-col :span="24">
-                <el-form-item label="发布栏目">
+                <el-form-item label="发布栏目" prop="catalogName">
                   <el-tree-select ref="form_catalog_tree"
                                   v-model="form.catalogName"
                                   :data="catalogOptions"
@@ -206,13 +206,11 @@
           </el-col>
 
           <el-col :span="24">
-<!--      <el-form-item label="文章内容">-->
               <ckeditor :editor="editor_data.editor"
                         @ready="onEditorReady"
                         v-model="form.articleHtml"
                         :config="editor_data.editorConfig">
               </ckeditor>
-<!--      </el-form-item>-->
           </el-col>
         </el-row>
       </el-form>
@@ -260,13 +258,12 @@ const data = reactive({
     catalogId: undefined,
     catalogName: undefined,
     createBy: undefined,
-    status: undefined
   },
   rules: {
     articleTitle: [{required: true, message: "内容标题不能为空", trigger: "blur"}],
     articleHtml: [{required: true, message: "内容正文不能为空", trigger: "blur"}],
     showTime: [{required: true, message: "内容发布日期不能为空", trigger: "blur"}],
-    catalogId: [{required: true, message: "所属栏目不能为空", trigger: "blur"}]
+    catalogName: [{required: true, message: "所属栏目不能为空", trigger: "blur"}],
   },
 });
 
@@ -392,8 +389,8 @@ function getList() {
 /**
  * 树形栏目
  */
-function getCatalogTreeSelect() {
-  treeCatalog().then(response => {
+function getCatalogTreeSelect(obj) {
+  treeCatalog(obj).then(response => {
     catalogOptions.value = response.data;
   });
 }
@@ -402,9 +399,9 @@ function getCatalogTreeSelect() {
  * 搜索框树形栏目
  */
 
-getCatalogTreeSelectForQuery();
-function getCatalogTreeSelectForQuery() {
-  treeCatalog().then(response => {
+getCatalogTreeSelectForQuery({catalogType: "0,1,11", status: "1",});
+function getCatalogTreeSelectForQuery(obj) {
+  treeCatalog(obj).then(response => {
     catalogOptionsForQuery.value = response.data;
   });
 }
@@ -426,9 +423,9 @@ function reset() {
     showTime: undefined,
     catalogId: undefined,
     catalogName: undefined,
-    status: "1"
+    status: "1",
   };
-  getCatalogTreeSelect();
+  getCatalogTreeSelect({catalogType: "0,1,11", status: "1",});
   proxy.resetForm("articleRef");
 }
 

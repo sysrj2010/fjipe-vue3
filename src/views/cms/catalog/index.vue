@@ -56,7 +56,17 @@
         :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
     >
       <el-table-column prop="catalogName" label="栏目名称" width="260"></el-table-column>
-      <el-table-column prop="orderNum" label="排序" width="200"></el-table-column>
+      <el-table-column prop="catalogType" label="栏目类型" width="200">
+        <template #default="scope">
+          <dict-tag :options="cms_catalog_type" :value="scope.row.catalogType" />
+        </template>
+      </el-table-column>
+      <el-table-column prop="linked" label="是否链接" width="100">
+        <template #default="scope">
+          <dict-tag :options="cms_catalog_linked" :value="scope.row.linked" />
+        </template>
+      </el-table-column>
+      <el-table-column prop="orderNum" label="排序" width="100"></el-table-column>
       <el-table-column prop="status" label="显示方式" width="100">
         <template #default="scope">
           <dict-tag :options="cms_catalog_status" :value="scope.row.status" />
@@ -77,10 +87,17 @@
     </el-table>
 
     <!-- 添加或修改栏目对话框 -->
-    <el-dialog :title="title" v-model="open" width="600px" append-to-body>
+    <el-dialog :title="title" v-model="open" width="800px" append-to-body>
       <el-form ref="catalogRef" :model="form" :rules="rules" label-width="80px">
         <el-row>
-          <el-col :span="24" v-if="form.parentId !== 0">
+
+          <el-col :span="12">
+            <el-form-item label="栏目名称" prop="catalogName">
+              <el-input v-model="form.catalogName" placeholder="请输入栏目名称" />
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="12" v-if="form.parentId !== 0">
             <el-form-item label="上级栏目" prop="parentId">
               <el-tree-select
                   v-model="form.parentId"
@@ -92,18 +109,21 @@
               />
             </el-form-item>
           </el-col>
-          <el-col :span="12">
-            <el-form-item label="栏目名称" prop="catalogName">
-              <el-input v-model="form.catalogName" placeholder="请输入栏目名称" />
+
+          <el-col :span="24">
+            <el-form-item label="栏目类型" prop="catalogType">
+              <el-radio-group v-model="form.catalogType">
+                <el-radio
+                    v-for="dict in cms_catalog_type"
+                    :key="dict.value"
+                    :label="dict.value"
+                >{{ dict.label }}</el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
+
           <el-col :span="12">
-            <el-form-item label="显示排序" prop="orderNum">
-              <el-input-number v-model="form.orderNum" controls-position="right" :min="0" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="栏目状态">
+            <el-form-item label="栏目状态" prop="status">
               <el-radio-group v-model="form.status">
                 <el-radio
                     v-for="dict in cms_catalog_status"
@@ -114,13 +134,63 @@
             </el-form-item>
           </el-col>
 
-          <el-row>
-            <el-col :span="24">
-              <el-form-item label="备注">
-                <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
+          <el-col :span="12">
+            <el-form-item label="显示排序" prop="orderNum">
+              <el-input-number v-model="form.orderNum" controls-position="right" :min="0" />
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item label="是否链接" prop="linked">
+              <el-radio-group v-model="form.linked">
+                <el-radio
+                    v-for="dict in cms_catalog_linked"
+                    :key="dict.value"
+                    :label="dict.value"
+                >{{ dict.label }}</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="16">
+            <el-form-item label="链接地址" prop="linkUrl">
+              <el-input v-model="form.linkUrl" placeholder="请输入链接地址" />
+            </el-form-item>
+          </el-col>
+
+<!--          <el-col :span="24" >-->
+<!--            <el-form-item label="栏目图标" prop="catalogIcon">-->
+<!--              <el-popover-->
+<!--                  placement="bottom-start"-->
+<!--                  :width="540"-->
+<!--                  v-model:visible="showChooseIcon"-->
+<!--                  trigger="click"-->
+<!--                  @show="showSelectIcon"-->
+<!--              >-->
+<!--                <template #reference>-->
+<!--                  <el-input v-model="form.icon" placeholder="点击选择图标" @blur="showSelectIcon" v-click-outside="hideSelectIcon" readonly>-->
+<!--                    <template #prefix>-->
+<!--                      <svg-icon-->
+<!--                          v-if="form.icon"-->
+<!--                          :icon-class="form.icon"-->
+<!--                          class="el-input__icon"-->
+<!--                          style="height: 32px;width: 16px;"-->
+<!--                      />-->
+<!--                      <el-icon v-else style="height: 32px;width: 16px;"><search /></el-icon>-->
+<!--                    </template>-->
+<!--                  </el-input>-->
+<!--                </template>-->
+<!--                <icon-select ref="iconSelectRef" @selected="selected" />-->
+<!--              </el-popover>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+
+
+          <el-col :span="24">
+            <el-form-item label="备注">
+              <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" ></el-input>
+            </el-form-item>
+          </el-col>
 
         </el-row>
       </el-form>
@@ -139,6 +209,8 @@ import { listCatalog, getCatalog, delCatalog, addCatalog, updateCatalog,listCata
 
 const { proxy } = getCurrentInstance();
 const { cms_catalog_status } = proxy.useDict("cms_catalog_status");
+const { cms_catalog_type } = proxy.useDict("cms_catalog_type");
+const { cms_catalog_linked } = proxy.useDict("cms_catalog_linked");
 
 const catalogList = ref([]);
 const open = ref(false);
@@ -158,7 +230,9 @@ const data = reactive({
   rules: {
     parentId: [{ required: true, message: "上级栏目不能为空", trigger: "blur" }],
     catalogName: [{ required: true, message: "栏目名称不能为空", trigger: "blur" }],
-    status: [{ required: true, message: "显示排序不能为空", trigger: "blur" }],
+    orderNum: [{ required: true, message: "显示排序不能为空", trigger: "blur" }],
+    status: [{ required: true, message: "栏目状态不能为空", trigger: "blur" }],
+    catalogType: [{ required: true, message: "栏目类型不能为空", trigger: "blur" }],
   },
 });
 
@@ -183,6 +257,10 @@ function reset() {
     catalogId: undefined,
     parentId: undefined,
     catalogName: undefined,
+    linkUrl: undefined,
+    catalogIcon: undefined,
+    catalogType: "1",
+    linked: "2",
     orderNum: 0,
     status: "1"
   };
@@ -260,4 +338,38 @@ function handleDelete(row) {
 }
 
 getList();
+
+
+/*********************************图标
+ *
+ */
+const showChooseIcon = ref(false);
+const iconSelectRef = ref(null);
+
+/** 图标外层点击隐藏下拉列表 */
+function hideSelectIcon(event) {
+  var elem = event.relatedTarget || event.srcElement || event.target || event.currentTarget;
+  var className = elem.className;
+  if (className !== "el-input__inner") {
+    showChooseIcon.value = false;
+  }
+}
+
+
+/** 展示下拉图标 */
+function showSelectIcon() {
+  // iconSelectRef.value.reset();
+  showChooseIcon.value = true;
+}
+/** 选择图标 */
+function selected(name) {
+  form.value.catalogIcon = name;
+  showChooseIcon.value = false;
+}
+/*********************************/
+
+
+
+
+
 </script>

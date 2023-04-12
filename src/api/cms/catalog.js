@@ -9,11 +9,12 @@ export function listCatalog(query) {
   })
 }
 
-// 查询网站栏目树形结构
-export function treeCatalog() {
+// 查询网站栏目树形结构 for 文章
+export function treeCatalog(query) {
   return request({
     url: '/cms/catalog/tree',
-    method: 'get'
+    method: 'get',
+    params: query
   })
 }
 
@@ -30,7 +31,7 @@ export function addCatalog(data) {
   return request({
     url: '/cms/catalog',
     method: 'post',
-    data: data
+    params: data
   })
 }
 
