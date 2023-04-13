@@ -158,32 +158,32 @@
             </el-form-item>
           </el-col>
 
-<!--          <el-col :span="24" >-->
-<!--            <el-form-item label="栏目图标" prop="catalogIcon">-->
-<!--              <el-popover-->
-<!--                  placement="bottom-start"-->
-<!--                  :width="540"-->
-<!--                  v-model:visible="showChooseIcon"-->
-<!--                  trigger="click"-->
-<!--                  @show="showSelectIcon"-->
-<!--              >-->
-<!--                <template #reference>-->
-<!--                  <el-input v-model="form.icon" placeholder="点击选择图标" @blur="showSelectIcon" v-click-outside="hideSelectIcon" readonly>-->
-<!--                    <template #prefix>-->
-<!--                      <svg-icon-->
-<!--                          v-if="form.icon"-->
-<!--                          :icon-class="form.icon"-->
-<!--                          class="el-input__icon"-->
-<!--                          style="height: 32px;width: 16px;"-->
-<!--                      />-->
-<!--                      <el-icon v-else style="height: 32px;width: 16px;"><search /></el-icon>-->
-<!--                    </template>-->
-<!--                  </el-input>-->
-<!--                </template>-->
-<!--                <icon-select ref="iconSelectRef" @selected="selected" />-->
-<!--              </el-popover>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
+          <el-col :span="24" >
+            <el-form-item label="栏目图标" prop="catalogIcon">
+              <el-popover
+                  placement="bottom-start"
+                  :width="540"
+                  v-model:visible="showChooseIcon"
+                  trigger="click"
+                  @show="showSelectIcon"
+              >
+                <template #reference>
+                  <el-input v-model="form.catalogIcon" placeholder="点击选择图标" @blur="showSelectIcon" v-click-outside="hideSelectIcon" readonly>
+                    <template #prefix>
+                      <svg-icon
+                          v-if="form.catalogIcon"
+                          :icon-class="form.catalogIcon"
+                          class="el-input__icon"
+                          style="height: 32px;width: 16px;"
+                      />
+                      <el-icon v-else style="height: 32px;width: 16px;"><search /></el-icon>
+                    </template>
+                  </el-input>
+                </template>
+                <icon-select ref="iconSelectRef" @selected="selected" />
+              </el-popover>
+            </el-form-item>
+          </el-col>
 
 
           <el-col :span="24">
@@ -343,6 +343,9 @@ getList();
 /*********************************图标
  *
  */
+import SvgIcon from "@/components/SvgIcon";
+import IconSelect from "@/components/IconSelect";
+import { ClickOutside as vClickOutside } from 'element-plus'
 const showChooseIcon = ref(false);
 const iconSelectRef = ref(null);
 
@@ -358,7 +361,7 @@ function hideSelectIcon(event) {
 
 /** 展示下拉图标 */
 function showSelectIcon() {
-  // iconSelectRef.value.reset();
+  iconSelectRef.value.reset();
   showChooseIcon.value = true;
 }
 /** 选择图标 */
