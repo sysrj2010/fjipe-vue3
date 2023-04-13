@@ -1,10 +1,10 @@
 <template>
-  <router-view />
+  <router-view/>
 </template>
 
 <script setup>
 import useSettingsStore from '@/store/modules/settings'
-import { handleThemeStyle } from '@/utils/theme'
+import {handleThemeStyle} from '@/utils/theme'
 
 onMounted(() => {
   nextTick(() => {
@@ -13,3 +13,10 @@ onMounted(() => {
   })
 })
 </script>
+
+<style>
+  /* tinymce 富文本菜单 */
+  .tox-tinymce-aux {
+    z-index: 999999 !important;
+  }
+</style>
