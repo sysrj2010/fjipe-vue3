@@ -15,8 +15,9 @@ onMounted(() => {
 </script>
 
 <style>
-  /* tinymce 富文本菜单 */
+  /* tinymce 富文本菜单 2038是el弹出消息 ，已把弹出的dialog（add/update）降为1000*/
   .tox-tinymce-aux {
-    z-index: 999999 !important;
+    z-index: 2037 !important;
   }
+
 </style>
