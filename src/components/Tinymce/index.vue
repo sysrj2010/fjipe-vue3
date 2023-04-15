@@ -11,28 +11,27 @@ import 'tinymce/icons/default'
 // import 'tinymce/models/dom' //tintmce6必需
 // tinymce插件可按自己的需要进行导入
 // 更多插件参考：https://www.tiny.cloud/docs/plugins/
-import 'tinymce/plugins/image' // 插入上传图片插件
-import 'tinymce/plugins/importcss' //图片工具
-import 'tinymce/plugins/media' // 插入视频插件
-import 'tinymce/plugins/lists' // 列表插件
-import 'tinymce/plugins/charmap' // 特殊字符
-import 'tinymce/plugins/wordcount' // 字数统计插件
-import 'tinymce/plugins/codesample' // 插入代码
-import 'tinymce/plugins/code' // 查看源码
-import 'tinymce/plugins/link' //
-import 'tinymce/plugins/preview' // 预览
-import 'tinymce/plugins/template' //插入模板
-import 'tinymce/plugins/save' // 保存
-import 'tinymce/plugins/searchreplace' //查询替换
-import 'tinymce/plugins/pagebreak' //分页
-import 'tinymce/plugins/insertdatetime'//时间插入
-
-//以下只能适配tinymce5
-import '@npkg/tinymce-plugins/imagetools'
-import '@npkg/tinymce-plugins/axupimgs'
-import '@npkg/tinymce-plugins/table'
-import '@npkg/tinymce-plugins/importword'
-import '@npkg/tinymce-plugins/upfile'
+import 'tinymce/plugins/image';// 插入上传图片插件
+import 'tinymce/plugins/media';// 插入视频插件
+import 'tinymce/plugins/imagetools';
+import 'tinymce/plugins/lists';// 列表插件,有序列表、无序列表
+import 'tinymce/plugins/wordcount';// 字数统计插件
+import 'tinymce/plugins/preview'// 插入预览
+import 'tinymce/plugins/code'// 插入代码
+import 'tinymce/plugins/link'// 插入链接
+import 'tinymce/plugins/advlist';
+import 'tinymce/plugins/codesample';  //插入、编辑代码示例
+import 'tinymce/plugins/hr';  //水平分割线
+import 'tinymce/plugins/fullscreen';  //全屏
+import 'tinymce/plugins/searchreplace';  //查找和替换
+import "tinymce/plugins/charmap";  //特殊符号
+import "tinymce/plugins/insertdatetime";  //插入时间、日期
+import "tinymce/plugins/imagetools";  //自定义图像
+import 'tinymce/plugins/anchor';  //插入锚点
+import '@npkg/tinymce-plugins/upfile';//文件上传
+import '@npkg/tinymce-plugins/table';//增强表格
+import '@npkg/tinymce-plugins/axupimgs';//多图上传
+import '@npkg/tinymce-plugins/importword';//导入表格
 
 import {onMounted} from "vue";
 import axios from "axios";
@@ -60,12 +59,19 @@ const props = defineProps({
 
   plugins: {
     type: [String, Array],
-    default: 'image imagetools axupimgs table importword  upfile'
+    default: "preview searchreplace " +
+        "fullscreen image axupimgs link media   table  hr " +
+        " insertdatetime advlist lists wordcount imagetools  " +
+        " axupimgs importword  upfile"
   },
   toolbar: {
     type: [String, Array],
     default:
-        "image axupimgs table importword  upfile",
+    "fullscreen source preview | undo redo  \
+       | forecolor backcolor bold italic underline \
+       | table image axupimgs media importword  upfile\
+       | alignleft aligncenter alignright alignjustify outdent indent lineheight \
+       | bullist numlist |  link charmap hr insertdatetime \ "
   }
 })
 
@@ -99,6 +105,84 @@ const init = {
   // 是否显示底部状态栏
   statusbar: true,
   // convert_urls: false,
+
+  content_style: `
+            *                         { padding:0; margin:0; }
+            html, body                { height:100%; }
+            img                       { max-width:100%; display:block;height:auto; }
+            a                         { text-decoration: none; }
+            iframe                    { width: 100%; }
+            p                         { line-height:1.6; margin: 0px; }
+            table                     { word-wrap:break-word; word-break:break-all; max-width:100%; border:none; border-color:#999; }
+            .mce-object-iframe        { width:100%; box-sizing:border-box; margin:0; padding:0; }
+            ul,ol                     { list-style-position:inside; }
+          `,
+  //字号设置
+  fontsize_formats: '12px 14px 16px 18px 20px 22px 24px 28px 32px 36px 48px 56px 72px',  //字体大小
+  //字体设置 //字体样式
+  font_formats: `
+            微软雅黑=微软雅黑;
+            宋体=宋体;
+            黑体=黑体;
+            仿宋=仿宋;
+            楷体=楷体;
+            隶书=隶书;
+            幼圆=幼圆;
+            Andale Mono=andale mono,times;
+            Arial=arial, helvetica,
+            sans-serif;
+            Arial Black=arial black, avant garde;
+            Book Antiqua=book antiqua,palatino;
+            Comic Sans MS=comic sans ms,sans-serif;
+            Courier New=courier new,courier;
+            Georgia=georgia,palatino;
+            Helvetica=helvetica;
+            Impact=impact,chicago;
+            Symbol=symbol;
+            Tahoma=tahoma,arial,helvetica,sans-serif;
+            Terminal=terminal,monaco;
+            Times New Roman=times new roman,times;
+            Trebuchet MS=trebuchet ms,geneva;
+            Verdana=verdana,geneva;
+            Webdings=webdings;
+            Wingdings=wingdings,zapf dingbats`,
+  lineheight_formats: "0.5 0.8 1 1.2 1.5 1.75 2 2.5 3 4 5",  //行高配置，也可配置成"12px 14px 16px 20px"这种形式
+
+  paste_retain_style_properties: 'all',  //粘贴保留样式属性
+  paste_word_valid_elements: '*[*]',        // word需要它
+  paste_data_images: true,                  // 粘贴的同时能把内容里的图片自动上传，非常强力的功能
+  paste_convert_word_fake_lists: false,     // 插入word文档需要该属性
+  paste_webkit_styles: 'all',
+  paste_merge_formats: true,
+  paste_auto_cleanup_on_paste: false,
+
+  default_link_target: '_blank',
+  link_title:false, //取消link工具的标题
+
+  // start-格式栏设置设置-CONFIG: StyleSelect
+  style_formats: [
+    {
+      title: '首行缩进',
+      block: 'p',
+      styles: { 'text-indent': '2em' }
+    },
+    {
+      title: '行高',
+      items: [
+        { title: '1', styles: { 'line-height': '1' }, inline: 'span' },
+        { title: '1.5', styles: { 'line-height': '1.5' }, inline: 'span' },
+        { title: '2', styles: { 'line-height': '2' }, inline: 'span' },
+        { title: '2.5', styles: { 'line-height': '2.5' }, inline: 'span' },
+        { title: '3', styles: { 'line-height': '3' }, inline: 'span' }
+      ]
+    }
+  ],
+  // end-格式栏设置设置
+  // Tab
+  tabfocus_elements: ':prev,:next',
+  object_resizing: true,
+  // Image
+  imagetools_toolbar: 'rotateleft rotateright | flipv fliph | editimage imageoptions',
 
   // 初始化完成
   init_instance_callback: (editor) => {
