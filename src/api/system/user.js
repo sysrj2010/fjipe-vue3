@@ -133,3 +133,11 @@ export function deptTreeSelect() {
     method: 'get'
   })
 }
+
+export function getHomeUserInfo() {
+  return request({
+    url: '/system/user/current',
+    method: 'get'
+  })
+}
+
