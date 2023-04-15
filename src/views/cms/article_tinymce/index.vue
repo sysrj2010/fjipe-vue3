@@ -232,8 +232,8 @@
 import {onActivated, onMounted} from 'vue'
 import {listArticle, getArticle, delArticle, addArticle, updateArticle} from "@/api/cms/article";
 import {treeCatalog} from "@/api/cms/catalog";
-import Tinymce from "@/components/Tinymce/index.vue";
 
+import Tinymce from "@/components/Tinymce/index.vue";
 const {proxy} = getCurrentInstance();
 const {cms_article_status} = proxy.useDict("cms_article_status");
 //图片数量限制

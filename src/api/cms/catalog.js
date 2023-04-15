@@ -31,7 +31,7 @@ export function addCatalog(data) {
   return request({
     url: '/cms/catalog',
     method: 'post',
-    params: data
+    data: data
   })
 }
 
