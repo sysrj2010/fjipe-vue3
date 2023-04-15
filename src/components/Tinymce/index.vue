@@ -270,7 +270,7 @@ const init = {
 
   //upfile 图标
   file_callback: function (file, success) {
-    console.log("file_callback:")
+  //  console.log("file_callback:")
     if (!file) {
       proxy.$modal.alertError("请选择上传的文件！");
       return;
