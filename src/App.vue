@@ -15,13 +15,13 @@ onMounted(() => {
 </script>
 
 <style>
-  /* tinymce 富文本菜单 2035是el弹出消息 ，已把弹出的dialog（add/update）降为1000*/
+  /* tinymce 富文本菜单 2020+是el弹出消息 ，已把弹出的dialog（add/update）降为1000*/
   .tox-tinymce-aux {
-    z-index: 2025 !important;
+    z-index: 2010 !important;
   }
 
   .tox-dialog{
-    z-index: 2030 !important;
+    z-index: 2020 !important;
   }
 
 </style>
