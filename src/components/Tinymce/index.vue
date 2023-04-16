@@ -223,7 +223,7 @@ const init = {
         if (res.data.code == 500) {
           proxy.$modal.alertError(res.data.msg);
         } else {
-          success(res.data.url);
+          success(res.data.fileName);
         }
       }).catch(err => {
         failure("上传失败");
@@ -233,7 +233,7 @@ const init = {
 
 // 图片上传右侧向上的箭头
   file_picker_callback: (callback, value, meta) => {
-    // console.log('file_picker_callback')
+     console.log('file_picker_callback')
     //文件分类
     var filetype = '.pdf, .txt, .zip, .rar, .7z, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .mp3, .mp4';
     //为不同插件指定文件类型
