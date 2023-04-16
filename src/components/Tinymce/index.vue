@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-
+const baseUrl = import.meta.env.VITE_APP_BASE_API;
 import tinymce from 'tinymce/tinymce' //tinymce默认hidden，不引入不显示
 import Editor from '@tinymce/tinymce-vue'
 import 'tinymce/themes/silver/theme' // 主题文件
@@ -76,7 +76,7 @@ const props = defineProps({
 })
 
 const upload_param = {
-  url: "/dev-api/common/upload",//需替换为真实路径测试
+  url: baseUrl+"/common/upload",//需替换为真实路径测试
   data: null,
   method: "post",
   bfLoading: true,
@@ -233,7 +233,7 @@ const init = {
 
 // 图片上传右侧向上的箭头
   file_picker_callback: (callback, value, meta) => {
-    console.log('file_picker_callback')
+    // console.log('file_picker_callback')
     //文件分类
     var filetype = '.pdf, .txt, .zip, .rar, .7z, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .mp3, .mp4';
     //为不同插件指定文件类型
@@ -260,7 +260,7 @@ const init = {
         if (res.data.code == 500) {
           proxy.$modal.alertError(res.data.msg);
         } else {
-          callback(res.data.url);
+          callback(baseUrl + res.data.fileName);
         }
       }).catch(err => {
         failure("文件上传失败");
@@ -282,7 +282,7 @@ const init = {
       if (res.data.code == 500) {
         proxy.$modal.alertError(res.data.msg);
       } else {
-        success(res.data.url, {text: res.data.originalFilename});
+        success(baseUrl + res.data.fileName, {text: res.data.originalFilename});
       }
     }).catch(err => {
       // failure("上传失败");
