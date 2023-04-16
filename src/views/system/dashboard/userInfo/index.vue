@@ -27,6 +27,7 @@
 
 import {getHomeUserInfo} from "@/api/system/user";
 const baseUrl = import.meta.env.VITE_APP_BASE_API;
+import defAva from '@/assets/images/photo.png'
 
 const data = reactive({
   userInfo: reactive({
@@ -42,11 +43,7 @@ const { userInfo} = toRefs(data);
 function loadUserInfo() {
   getHomeUserInfo().then(response => {
     userInfo.value = response.userInfo;
-    if (userInfo.value.avatar && userInfo.value.avatar != '') {
-      userInfo.value.avatar =  baseUrl+userInfo.value.avatar;
-    } else {
-      userInfo.value.avatar =   '/src/assets/images/profile.jpg';
-    }
+    userInfo.value.avatar = (userInfo.value.avatar == "" || userInfo.value.avatar == null) ? defAva : import.meta.env.VITE_APP_BASE_API + userInfo.value.avatar;
   })
 };
 
