@@ -94,7 +94,7 @@ const init = {
   skin_url: '/tinymce/skins/ui/oxide',
   // skin_url: 'tinymce/skins/ui/oxide-dark',//黑色系
   content_css: '/tinymce/skins/content/default/content.css', //内容区域css样式
-  images_file_types: "jpg,svg,webp",
+  images_file_types: "jpg,svg,webp,png,jpeg,bpm",
   plugins: props.plugins,
   toolbar: props.toolbar,
   branding: false,
@@ -215,7 +215,7 @@ const init = {
   // 图片左侧下方上传(含多图上传)
   images_upload_handler: (blobInfo, success, failure, progress) => {
     if (blobInfo.blob().size / 1024 / 1024 > 2) {
-      failure("上传失败，图片大小请控制在 2M 以内")
+      proxy.$modal.alertError("上传失败，图片大小请控制在 2M 以内")
     } else {
       upload_param.data = new FormData();
       upload_param.data.append("file", blobInfo.blob());
@@ -223,17 +223,17 @@ const init = {
         if (res.data.code == 500) {
           proxy.$modal.alertError(res.data.msg);
         } else {
-          success(res.data.fileName);
+          success(baseUrl + res.data.fileName);
         }
       }).catch(err => {
-        failure("上传失败");
+        proxy.$modal.alertError("上传失败");
       });
     }
   },
 
 // 图片上传右侧向上的箭头
   file_picker_callback: (callback, value, meta) => {
-     console.log('file_picker_callback')
+   //  console.log('file_picker_callback')
     //文件分类
     var filetype = '.pdf, .txt, .zip, .rar, .7z, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .mp3, .mp4';
     //为不同插件指定文件类型
@@ -285,7 +285,7 @@ const init = {
         success(baseUrl + res.data.fileName, {text: res.data.originalFilename});
       }
     }).catch(err => {
-      // failure("上传失败");
+      proxy.$modal.alertError("上传失败");
     });
   }
 
