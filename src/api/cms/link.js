@@ -20,7 +20,7 @@ export function getLink(linkId) {
 // 新增链接
 export function addLink(data) {
   return request({
-    url: '/cms/link',
+    url: '/cms/link/add',
     method: 'post',
     data: data
   })
@@ -29,8 +29,8 @@ export function addLink(data) {
 // 修改链接
 export function updateLink(data) {
   return request({
-    url: '/cms/link',
-    method: 'put',
+    url: '/cms/link/upt',
+    method: 'post',
     data: data
   })
 }
@@ -38,7 +38,7 @@ export function updateLink(data) {
 // 删除链接
 export function delLink(linkId) {
   return request({
-    url: '/cms/link/' + linkId,
-    method: 'delete'
+    url: '/cms/link/del/' + linkId,
+    method: 'post'
   })
 }

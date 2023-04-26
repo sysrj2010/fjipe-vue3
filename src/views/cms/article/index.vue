@@ -135,7 +135,7 @@
     />
 
     <!-- 添加或修改内容对话框 -->
-    <el-dialog :title="title" v-model="open" width="1000px" append-to-body z-index="1000">
+    <el-dialog :title="title" v-model="open" width="1000px" append-to-body z-index=1000>
       <el-form ref="articleRef" :model="form" :rules="rules" label-width="80px">
         <el-row>
           <el-col :span="24">

@@ -27,7 +27,7 @@ class ImageUploadAdapter {
 
         // 方法返回数据格式： {default: "url"}
         return {
-            default: baseUrl + res.data.fileName,
+            default: baseUrl + res.data.url,
         };
     }
 }

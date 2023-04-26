@@ -12,15 +12,15 @@ export function listJobLog(query) {
 // 删除调度日志
 export function delJobLog(jobLogId) {
   return request({
-    url: '/monitor/jobLog/' + jobLogId,
-    method: 'delete'
+    url: '/monitor/jobLog/del/' + jobLogId,
+    method: 'post'
   })
 }
 
 // 清空调度日志
 export function cleanJobLog() {
   return request({
-    url: '/monitor/jobLog/clean',
-    method: 'delete'
+    url: '/monitor/jobLog/clean/del',
+    method: 'post'
   })
 }

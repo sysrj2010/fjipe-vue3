@@ -20,7 +20,7 @@ export function getArticle(articleId) {
 // 新增网站文章
 export function addArticle(data) {
   return request({
-    url: '/cms/article',
+    url: '/cms/article/add',
     method: 'post',
     data: data
   })
@@ -29,8 +29,8 @@ export function addArticle(data) {
 // 修改网站文章
 export function updateArticle(data) {
   return request({
-    url: '/cms/article',
-    method: 'put',
+    url: '/cms/article/upt/',
+    method: 'post',
     data: data
   })
 }
@@ -38,7 +38,7 @@ export function updateArticle(data) {
 // 删除网站文章
 export function delArticle(articleId) {
   return request({
-    url: '/cms/article/' + articleId,
-    method: 'delete'
+    url: '/cms/article/del/' + articleId,
+    method: 'post'
   })
 }

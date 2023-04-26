@@ -29,7 +29,7 @@ export function getCatalog(catalogId) {
 // 新增网站栏目
 export function addCatalog(data) {
   return request({
-    url: '/cms/catalog',
+    url: '/cms/catalog/add',
     method: 'post',
     data: data
   })
@@ -38,8 +38,8 @@ export function addCatalog(data) {
 // 修改网站栏目
 export function updateCatalog(data) {
   return request({
-    url: '/cms/catalog',
-    method: 'put',
+    url: '/cms/catalog/upt',
+    method: 'post',
     data: data
   })
 }
@@ -47,8 +47,8 @@ export function updateCatalog(data) {
 // 删除网站栏目
 export function delCatalog(catalogId) {
   return request({
-    url: '/cms/catalog/' + catalogId,
-    method: 'delete'
+    url: '/cms/catalog/del/' + catalogId,
+    method: 'post'
   })
 }
 
