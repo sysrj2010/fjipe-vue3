@@ -213,7 +213,7 @@
           </el-col>
 
           <el-col :span="24">
-            <div style="z-index:999999999;"><Tinymce ref="refTinymce"  v-model="form.articleHtml"/></div>
+            <Tinymce ref="refTinymce"  v-model="form.articleHtml"/>
           </el-col>
         </el-row>
       </el-form>
@@ -314,7 +314,7 @@ function reset() {
     articleTitle: undefined,
     articleDesc: undefined,
     imgPath: undefined,
-    ArticleHtml: "<div>请在此输入正文...</div>",
+    articleHtml: "<div>请在此输入正文...</div>",
     showTime: undefined,
     catalogId: undefined,
     catalogName: undefined,
@@ -323,6 +323,7 @@ function reset() {
   };
   getCatalogTreeSelect({catalogType: "0,1,11", status: "1",});
   proxy.resetForm("articleRef");
+//  proxy.$refs["articleRef"]
 }
 
 /** 搜索按钮操作 */
