@@ -28,7 +28,6 @@
                         :render-after-expand="false"
                         show-checkbox
                         style="width: 200px"
-                        @keyup.enter="handleQuery"
         />
       </el-form-item>
 
@@ -328,6 +327,7 @@ function reset() {
 
 /** 搜索按钮操作 */
 function handleQuery() {
+  select_treeNode_catalogIdOfQuery();
   queryParams.value.pageNum = 1;
   getList();
 }
@@ -389,6 +389,18 @@ function submitForm() {
       }
     }
   });
+}
+
+//获取选择有栏目节点编号
+function select_treeNode_catalogIdOfQuery()
+{
+  let nodes = proxy.$refs['query_catalog_tree'].getCheckedNodes();
+  let ids = new Array();
+  nodes.forEach((node,index,array)=>{
+    if(node.children == null)
+      ids.push(node.id);
+  })
+  queryParams.value.catalogId=","+ids.join()+","
 }
 
 //获取选择有栏目节点编号

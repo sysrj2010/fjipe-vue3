@@ -214,8 +214,8 @@ const init = {
 
   // 图片左侧下方上传(含多图上传)
   images_upload_handler: (blobInfo, success, failure, progress) => {
-    if (blobInfo.blob().size / 1024 / 1024 > 2) {
-      proxy.$modal.alertError("上传失败，图片大小请控制在 2M 以内")
+    if (blobInfo.blob().size / 1024 / 1024 > 500) {
+      proxy.$modal.alertError("上传失败，图片大小请控制在 500M 以内")
     } else {
       upload_param.data = new FormData();
       upload_param.data.append("file", blobInfo.blob());
