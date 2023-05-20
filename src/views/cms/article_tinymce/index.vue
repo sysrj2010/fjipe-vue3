@@ -313,7 +313,7 @@ function reset() {
     articleTitle: undefined,
     articleDesc: undefined,
     imgPath: undefined,
-    articleHtml: "<div>请在此输入正文...</div>",
+    articleHtml: "",
     showTime: undefined,
     catalogId: undefined,
     catalogName: undefined,
@@ -348,6 +348,14 @@ function handleSelectionChange(selection) {
 /** 新增按钮操作 */
 function handleAdd() {
   reset();
+  let date = new Date();
+  let year = date.getFullYear().toString().padStart(4, '0');
+  let month = (date.getMonth() + 1).toString().padStart(2, '0');
+  let day = date.getDate().toString().padStart(2, '0');
+  let hour = date.getHours().toString().padStart(2, '0');
+  let minute = date.getMinutes().toString().padStart(2, '0');
+  let second = date.getSeconds().toString().padStart(2, '0');
+  form.value.showTime=`${year}-${month}-${day} ${hour}:${minute}:${second}`;
   open.value = true;
   title.value = "添加内容";
 }

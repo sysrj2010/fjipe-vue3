@@ -370,7 +370,7 @@ const editor_data = reactive({
 })
 
 function onEditorReady(editor) {
-  form.value.ArticleHtml="请在此处输入正文...";
+  form.value.ArticleHtml="";
   editor.plugins.get("FileRepository").createUploadAdapter = loader => {
     return new ImageUploadAdapter(loader);
   };
@@ -464,6 +464,14 @@ function handleSelectionChange(selection) {
 /** 新增按钮操作 */
 function handleAdd() {
   reset();
+  let date = new Date();
+  let year = date.getFullYear().toString().padStart(4, '0');
+  let month = (date.getMonth() + 1).toString().padStart(2, '0');
+  let day = date.getDate().toString().padStart(2, '0');
+  let hour = date.getHours().toString().padStart(2, '0');
+  let minute = date.getMinutes().toString().padStart(2, '0');
+  let second = date.getSeconds().toString().padStart(2, '0');
+  form.value.showTime=`${year}-${month}-${day} ${hour}:${minute}:${second}`;
   open.value = true;
   title.value = "添加内容";
 }
