@@ -524,7 +524,10 @@ function select_treeNode_catalogId()
     if(node.children == null)
       ids.push(node.id);
   })
-  form.value.catalogId=","+ids.join()+","
+  if(ids.length>0)
+    queryParams.value.catalogId=","+ids.join()+",";
+  else
+    queryParams.value.catalogId = undefined;
 }
 
 /** 删除按钮操作 */

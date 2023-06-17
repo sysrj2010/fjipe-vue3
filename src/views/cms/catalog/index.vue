@@ -158,33 +158,44 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="24" >
+<!--          <el-col :span="24" >-->
+<!--            <el-form-item label="栏目图标" prop="catalogIcon">-->
+<!--              <el-popover-->
+<!--                  placement="bottom-start"-->
+<!--                  :width="540"-->
+<!--                  v-model:visible="showChooseIcon"-->
+<!--                  trigger="click"-->
+<!--                  @show="showSelectIcon"-->
+<!--              >-->
+<!--                <template #reference>-->
+<!--                  <el-input v-model="form.catalogIcon" placeholder="点击选择图标" @blur="showSelectIcon" v-click-outside="hideSelectIcon" readonly>-->
+<!--                    <template #prefix>-->
+<!--                      <svg-icon-->
+<!--                          v-if="form.catalogIcon"-->
+<!--                          :icon-class="form.catalogIcon"-->
+<!--                          class="el-input__icon"-->
+<!--                          style="height: 32px;width: 16px;"-->
+<!--                      />-->
+<!--                      <el-icon v-else style="height: 32px;width: 16px;"><search /></el-icon>-->
+<!--                    </template>-->
+<!--                  </el-input>-->
+<!--                </template>-->
+<!--                <icon-select ref="iconSelectRef" @selected="selected" />-->
+<!--              </el-popover>-->
+<!--            </el-form-item>-->
+<!--          </el-col>-->
+
+          <el-col :span="18">
             <el-form-item label="栏目图标" prop="catalogIcon">
-              <el-popover
-                  placement="bottom-start"
-                  :width="540"
-                  v-model:visible="showChooseIcon"
-                  trigger="click"
-                  @show="showSelectIcon"
-              >
-                <template #reference>
-                  <el-input v-model="form.catalogIcon" placeholder="点击选择图标" @blur="showSelectIcon" v-click-outside="hideSelectIcon" readonly>
-                    <template #prefix>
-                      <svg-icon
-                          v-if="form.catalogIcon"
-                          :icon-class="form.catalogIcon"
-                          class="el-input__icon"
-                          style="height: 32px;width: 16px;"
-                      />
-                      <el-icon v-else style="height: 32px;width: 16px;"><search /></el-icon>
-                    </template>
-                  </el-input>
-                </template>
-                <icon-select ref="iconSelectRef" @selected="selected" />
-              </el-popover>
+              <el-input v-model="form.catalogIcon" placeholder="复制内容粘贴此处" ></el-input>
             </el-form-item>
           </el-col>
 
+          <el-col :span="6">
+            <el-form-item label="" >
+              <el-link href='https://fa6.dashgame.com/' target='_blank' type="primary" icon="search" >&nbsp;&nbsp;图标库</el-link>
+            </el-form-item>
+          </el-col>
 
           <el-col :span="24">
             <el-form-item label="备注">

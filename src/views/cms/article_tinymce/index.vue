@@ -408,7 +408,10 @@ function select_treeNode_catalogIdOfQuery()
     if(node.children == null)
       ids.push(node.id);
   })
-  queryParams.value.catalogId=","+ids.join()+","
+  if(ids.length>0)
+    queryParams.value.catalogId=","+ids.join()+",";
+  else
+    queryParams.value.catalogId = undefined;
 }
 
 //获取选择有栏目节点编号
