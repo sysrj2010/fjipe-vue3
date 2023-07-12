@@ -13,7 +13,6 @@ import 'tinymce/icons/default'
 // 更多插件参考：https://www.tiny.cloud/docs/plugins/
 import 'tinymce/plugins/image';// 插入上传图片插件
 import 'tinymce/plugins/media';// 插入视频插件
-import 'tinymce/plugins/imagetools';
 import 'tinymce/plugins/lists';// 列表插件,有序列表、无序列表
 import 'tinymce/plugins/wordcount';// 字数统计插件
 import 'tinymce/plugins/preview'// 插入预览
@@ -28,10 +27,12 @@ import "tinymce/plugins/charmap";  //特殊符号
 import "tinymce/plugins/insertdatetime";  //插入时间、日期
 import "tinymce/plugins/imagetools";  //自定义图像
 import 'tinymce/plugins/anchor';  //插入锚点
-import '@npkg/tinymce-plugins/upfile';//文件上传
-import '@npkg/tinymce-plugins/table';//增强表格
-import '@npkg/tinymce-plugins/axupimgs';//多图上传
-import '@npkg/tinymce-plugins/importword';//导入表格
+
+import '/public/tinymce/tinymce-plugin/tinymce-plugin';
+import '/public/plugins/upfile/plugin';//文件上传
+import '/public/plugins/tpTable/plugin';//增强表格
+import '/public/plugins/axupimgs/plugin';//多图上传
+import '/public/plugins/tpImportword/plugin';//word
 
 import {onMounted} from "vue";
 import axios from "axios";
@@ -60,16 +61,16 @@ const props = defineProps({
   plugins: {
     type: [String, Array],
     default: "preview searchreplace " +
-        "fullscreen image axupimgs link media   table  hr " +
+        "fullscreen image  link media upfile tpTable axupimgs tpImportword  hr " +
         " insertdatetime advlist lists wordcount imagetools  " +
-        " axupimgs importword  upfile"
+        "   "
   },
   toolbar: {
     type: [String, Array],
     default:
     "fullscreen source preview | undo redo  \
        | forecolor backcolor bold italic underline \
-       | table image axupimgs media importword  upfile\
+       |  image axupimgs  media upfile | tpTable  tpImportword \
        | alignleft aligncenter alignright alignjustify outdent indent lineheight \
        | bullist numlist |  link charmap hr insertdatetime \ "
   }

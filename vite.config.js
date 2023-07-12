@@ -21,7 +21,7 @@ export default defineConfig(({ mode, command }) => {
         '@': path.resolve(__dirname, './src')
       },
       // https://cn.vitejs.dev/config/#resolve-extensions
-      extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue']
+      extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue', '.html']
     },
     // vite 相关配置
     server: {
