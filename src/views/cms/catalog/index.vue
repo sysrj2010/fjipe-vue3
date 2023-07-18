@@ -122,7 +122,7 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="栏目状态" prop="status">
               <el-radio-group v-model="form.status">
                 <el-radio
@@ -134,9 +134,22 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="12">
+          <el-col :span="8">
             <el-form-item label="显示排序" prop="orderNum">
               <el-input-number v-model="form.orderNum" controls-position="right" :min="0" />
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item label="归属部门" prop="deptId">
+              <el-tree-select
+                  v-model="form.deptId"
+                  :data="deptOptions"
+                  :props="{ value: 'id', label: 'label', children: 'children' }"
+                  value-key="id"
+                  placeholder="请选择归属部门"
+                  check-strictly
+              />
             </el-form-item>
           </el-col>
 
@@ -157,33 +170,6 @@
               <el-input v-model="form.linkUrl" placeholder="请输入链接地址" />
             </el-form-item>
           </el-col>
-
-<!--          <el-col :span="24" >-->
-<!--            <el-form-item label="栏目图标" prop="catalogIcon">-->
-<!--              <el-popover-->
-<!--                  placement="bottom-start"-->
-<!--                  :width="540"-->
-<!--                  v-model:visible="showChooseIcon"-->
-<!--                  trigger="click"-->
-<!--                  @show="showSelectIcon"-->
-<!--              >-->
-<!--                <template #reference>-->
-<!--                  <el-input v-model="form.catalogIcon" placeholder="点击选择图标" @blur="showSelectIcon" v-click-outside="hideSelectIcon" readonly>-->
-<!--                    <template #prefix>-->
-<!--                      <svg-icon-->
-<!--                          v-if="form.catalogIcon"-->
-<!--                          :icon-class="form.catalogIcon"-->
-<!--                          class="el-input__icon"-->
-<!--                          style="height: 32px;width: 16px;"-->
-<!--                      />-->
-<!--                      <el-icon v-else style="height: 32px;width: 16px;"><search /></el-icon>-->
-<!--                    </template>-->
-<!--                  </el-input>-->
-<!--                </template>-->
-<!--                <icon-select ref="iconSelectRef" @selected="selected" />-->
-<!--              </el-popover>-->
-<!--            </el-form-item>-->
-<!--          </el-col>-->
 
           <el-col :span="18">
             <el-form-item label="栏目图标" prop="catalogIcon">
@@ -217,12 +203,14 @@
 
 <script setup name="Catalog">
 import { listCatalog, getCatalog, delCatalog, addCatalog, updateCatalog,listCatalogExcludeChild} from "@/api/cms/catalog";
+import { deptTreeSelect } from "@/api/system/user";
 
 const { proxy } = getCurrentInstance();
 const { cms_catalog_status } = proxy.useDict("cms_catalog_status");
 const { cms_catalog_type } = proxy.useDict("cms_catalog_type");
 const { cms_catalog_linked } = proxy.useDict("cms_catalog_linked");
 
+const deptOptions = ref(undefined);
 const catalogList = ref([]);
 const open = ref(false);
 const loading = ref(true);
@@ -262,6 +250,14 @@ function cancel() {
   open.value = false;
   reset();
 }
+
+/** 查询部门下拉树结构 */
+function getDeptTree() {
+  deptTreeSelect().then(response => {
+    deptOptions.value = response.data;
+  });
+};
+
 /** 表单重置 */
 function reset() {
   form.value = {
@@ -270,6 +266,7 @@ function reset() {
     catalogName: undefined,
     linkUrl: undefined,
     catalogIcon: undefined,
+    deptID: undefined,
     catalogType: "1",
     linked: "2",
     orderNum: 0,
@@ -383,7 +380,7 @@ function selected(name) {
 /*********************************/
 
 
-
+getDeptTree();
 
 
 </script>
