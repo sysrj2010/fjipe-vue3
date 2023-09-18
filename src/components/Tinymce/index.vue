@@ -33,6 +33,8 @@ import '/public/plugins/upfile/plugin';//文件上传
 import '/public/plugins/tpTable/plugin';//增强表格
 import '/public/plugins/axupimgs/plugin';//多图上传
 import '/public/plugins/tpImportword/plugin';//word
+import '/public/plugins/formatpainter/format';//formatpainter
+
 
 import {onMounted} from "vue";
 import axios from "axios";
@@ -62,13 +64,13 @@ const props = defineProps({
     type: [String, Array],
     default: "preview searchreplace " +
         "fullscreen image  link media upfile tpTable axupimgs tpImportword  hr " +
-        " insertdatetime advlist lists wordcount imagetools  " +
+        " insertdatetime advlist lists wordcount imagetools formatpainter" +
         "   "
   },
   toolbar: {
     type: [String, Array],
     default:
-    "fullscreen source preview | undo redo  \
+    "formatpainter | fullscreen source preview | undo redo  \
        | forecolor backcolor bold italic underline \
        |  image axupimgs  media upfile | tpTable  tpImportword \
        | alignleft aligncenter alignright alignjustify outdent indent lineheight \
