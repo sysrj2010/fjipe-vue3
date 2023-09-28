@@ -27,6 +27,7 @@ import "tinymce/plugins/charmap";  //特殊符号
 import "tinymce/plugins/insertdatetime";  //插入时间、日期
 import "tinymce/plugins/imagetools";  //自定义图像
 import 'tinymce/plugins/anchor';  //插入锚点
+import 'tinymce/plugins/code';  //源码
 
 import '/public/tinymce/tinymce-plugin/tinymce-plugin';
 import '/public/plugins/upfile/plugin';//文件上传
@@ -62,7 +63,7 @@ const props = defineProps({
 
   plugins: {
     type: [String, Array],
-    default: "preview searchreplace " +
+    default: "code preview searchreplace " +
         "fullscreen image  link media upfile tpTable axupimgs tpImportword  hr " +
         " insertdatetime advlist lists wordcount imagetools formatpainter" +
         "   "
@@ -70,7 +71,7 @@ const props = defineProps({
   toolbar: {
     type: [String, Array],
     default:
-    "formatpainter | fullscreen source preview | undo redo  \
+    "code formatpainter | fullscreen source preview | undo redo  \
        | forecolor backcolor bold italic underline \
        |  image axupimgs  media upfile | tpTable  tpImportword \
        | alignleft aligncenter alignright alignjustify outdent indent lineheight \
