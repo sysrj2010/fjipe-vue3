@@ -222,7 +222,7 @@ const init = {
       proxy.$modal.alertError("上传失败，图片大小请控制在 500M 以内")
     } else {
       upload_param.data = new FormData();
-      upload_param.data.append("file", blobInfo.blob());
+      upload_param.data.append("file", blobInfo.blob(),'word-' + Date.now() + Math.floor(Math.random() * 1000) + '.png');
       axios(upload_param).then(res => {
         if (res.data.code == 500) {
           proxy.$modal.alertError(res.data.msg);
