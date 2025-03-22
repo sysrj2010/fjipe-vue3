@@ -18,6 +18,7 @@
 
 <script setup>
 import { updateUserPwd } from "@/api/system/user";
+import { encrypt } from '@/utils/jsencrypt'
 
 const { proxy } = getCurrentInstance();
 
@@ -44,12 +45,21 @@ const rules = ref({
 function submit() {
   proxy.$refs.pwdRef.validate(valid => {
     if (valid) {
-      updateUserPwd(user.oldPassword, user.newPassword).then(response => {
-        proxy.$modal.msgSuccess("修改成功");
-      });
+      this.getPublicKey().then(res=>{
+        let publicKey = res.publicKey
+        console.log("res.publicKey",res.publicKey)
+        const oldPassword = encrypt(this.user.oldPassword, publicKey)
+        const newPassword = encrypt(this.user.newPassword, publicKey)
+        updateUserPwd(oldPassword, newPassword).then(
+            response => {
+              this.msgSuccess("修改成功");
+            }
+        );
+      })
     }
   });
 };
+
 /** 关闭按钮 */
 function close() {
   proxy.$tab.closePage();

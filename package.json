@@ -26,7 +26,7 @@
     "file-saver": "2.0.5",
     "fuse.js": "6.6.2",
     "js-cookie": "3.0.1",
-    "jsencrypt": "3.3.1",
+    "jsencrypt": "^3.3.2",
     "my-ckeditor5-classic": "^0.5.37",
     "nprogress": "0.2.0",
     "pinia": "2.0.22",
