@@ -18,7 +18,8 @@
 
 <script setup>
 import { updateUserPwd } from "@/api/system/user";
-import { encrypt } from '@/utils/jsencrypt'
+import {getPublicKey} from "../../../../api/login";
+import {encrypt} from "../../../../api/tool/jsencrypt";
 
 const { proxy } = getCurrentInstance();
 
@@ -45,14 +46,17 @@ const rules = ref({
 function submit() {
   proxy.$refs.pwdRef.validate(valid => {
     if (valid) {
-      this.getPublicKey().then(res=>{
-        let publicKey = res.publicKey
-        console.log("res.publicKey",res.publicKey)
-        const oldPassword = encrypt(this.user.oldPassword, publicKey)
-        const newPassword = encrypt(this.user.newPassword, publicKey)
+      getPublicKey().then(res => {
+        //调用加密方法(传密码和公钥)
+        const publicKey = res.publicKey
+        let oldPassword = user.oldPassword
+        let newPassword = user.newPassword
+        oldPassword = encrypt(publicKey,oldPassword)
+        newPassword = encrypt(publicKey,newPassword)
         updateUserPwd(oldPassword, newPassword).then(
             response => {
-              this.msgSuccess("修改成功");
+          //    this.msgSuccess("修改成功");
+              proxy.$modal.msgSuccess("修改成功");
             }
         );
       })
